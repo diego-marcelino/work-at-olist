@@ -5,18 +5,10 @@ env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
 
-on:
-  pull_request:
-    branches: [ "master" ]
-    paths-ignore: [ "docs/**" ]
-
-  push:
-    branches: [ "master" ]
-    paths-ignore: [ "docs/**" ]
-
+on: [push]
 
 jobs:
-  flake8:
+  code_quality:
     runs-on: ubuntu-latest
     steps:
 
@@ -28,22 +20,41 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install flake8
+      - name: Install pre commit
         run: |
           python -m pip install --upgrade pip
-          pip install flake8
+          pip install pre-commit==2.6.0
+          pre-commit install
+          pre-commit autoupdate
 
-      - name: Lint with flake8
-        run: flake8
+      - name: Lint with flake8 and code check
+        run: |
+          pre-commit run -a -v
 
 # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:12.3
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: 123
+          POSTGRES_DB: database
+          POSTGRES_PORT: 5432
+        ports:
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://user:123@localhost:5432/database
+
     steps:
 
       - name: Checkout Code Repository
         uses: actions/checkout@v2
-      
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
@@ -55,7 +66,6 @@ jobs:
         run: |
           echo "::set-output name=dir::$(pip cache dir)"
 
-      
       - name: Cache pip Project Dependencies
         uses: actions/cache@v2
         with:
@@ -65,7 +75,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/local.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      
 
       - name: Install Dependencies
         run: |
@@ -73,4 +82,14 @@ jobs:
           pip install -r requirements/local.txt
 
       - name: Test with pytest
-        run:  pytest
+        run: |
+          coverage run -m pytest
+
+      - name: Collect coverage report
+        run: |
+          coverage xml
+
+      - name: Send coverage report to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
