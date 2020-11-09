@@ -1,0 +1,22 @@
+-r base.txt
+
+ipdb==0.13.4  # https://github.com/gotcha/ipdb
+psycopg2-binary==2.8.6  # https://github.com/psycopg/psycopg2
+Werkzeug==1.0.1 # https://github.com/pallets/werkzeug
+
+# Testing
+# ------------------------------------------------------------------------------
+django-coverage-plugin==1.8.0  # https://github.com/nedbat/django_coverage_plugin
+factory-boy==3.0.1  # https://github.com/FactoryBoy/factory_boy
+pytest-django==4.0.0  # https://github.com/pytest-dev/pytest-django
+pytest-sugar==0.9.4  # https://github.com/Frozenball/pytest-sugar
+pytest==6.1.1  # https://github.com/pytest-dev/pytest
+
+# Code quality
+# ------------------------------------------------------------------------------
+coverage==5.3  # https://github.com/nedbat/coveragepy
+pre-commit==2.7.1  # https://github.com/pre-commit/pre-commit
+
+# Django
+# ------------------------------------------------------------------------------
+django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions

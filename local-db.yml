@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.3
+    container_name: postgres
+    env_file:
+      - ./.envs/.local/.postgres
+    ports:
+      - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ./.envs/.local/.pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - 9000:80

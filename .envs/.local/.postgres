@@ -1,0 +1,8 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=work_at_olist
+POSTGRES_USER=dbuser
+POSTGRES_PASSWORD=passw0rd
+DATABASE_URL=postgres://dbuser:passw0rd@127.0.0.1:5432/work_at_olist
