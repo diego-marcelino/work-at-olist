@@ -68,7 +68,10 @@ THIRD_PARTY_APPS = (
     'drf_yasg',
     'rest_framework',
 )
-LOCAL_APPS = ('work_at_olist.authors.apps.AuthorsAppConfig',)
+LOCAL_APPS = (
+    'work_at_olist.authors.apps.AuthorsAppConfig',
+    'work_at_olist.books.apps.BooksAppConfig',
+)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [*DJANGO_APPS, *THIRD_PARTY_APPS, *LOCAL_APPS]
