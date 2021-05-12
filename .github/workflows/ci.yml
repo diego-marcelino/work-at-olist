@@ -90,6 +90,6 @@ jobs:
           coverage xml
 
       - name: Send coverage report to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.5.0
         with:
           file: ./coverage.xml
